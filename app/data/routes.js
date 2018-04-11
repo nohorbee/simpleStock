@@ -11,7 +11,7 @@ const MULE_STOCK_FROZEN_PRICE = 36
 module.exports = function(app, db) {
 
   app.get('/data/', (req, res) => {
-
+    if(!process.env.TOKEN) res.status('503').send("The security has not been configured yet");
     if(req.headers.authorization !== process.env.TOKEN) res.status('401').send();
 
 
