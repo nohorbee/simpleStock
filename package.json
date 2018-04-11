@@ -1,0 +1,23 @@
+{
+  "name": "mit",
+  "version": "1.0.0",
+  "description": "A set of applications to augmenet Teg capabilities for Management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "mongodb": "^2.2.16",
+    "request": "^2.85.0",
+    "xml2js": "^0.4.19"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
