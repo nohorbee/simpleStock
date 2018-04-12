@@ -2,8 +2,10 @@ require('dotenv').config()
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 let port = process.env.PORT || 8000;
 
 app.use(bodyParser.urlencoded({extended: true}));
