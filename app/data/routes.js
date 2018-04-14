@@ -14,35 +14,35 @@ module.exports = function(app, db) {
     if(!process.env.TOKEN) res.status('503').send("The security has not been configured yet");
     if(req.headers.authorization !== process.env.TOKEN) res.status('401').send();
 
-    getPrice(MULE_SYMBOL).then(muleStockPrice => {
-      getPrice(SALESFORCE_SYMBOL).then(salesForceStockPrice => {
+    let mulePricePromise = getPrice(MULE_SYMBOL);
+    let salesforcePricePromise = getPrice(SALESFORCE_SYMBOL);
 
-        let response = {
-          mule: {
-            frozenPrice: MULE_STOCK_FROZEN_PRICE,
-            price: muleStockPrice,
-            qty: MULE_STOCK_COUNT
-          },
-          salesForce: {
-            price: salesForceStockPrice,
-            qty: SALESFORCE_STOCK_COUNT,
-          }
-        };
+    Promise.all([mulePricePromise, salesforcePricePromise]).then(values => {
+      muleStockPrice = values[0];
+      salesForceStockPrice = values[1];
 
-        res.send(response);
+      let response = {
+        mule: {
+          frozenPrice: MULE_STOCK_FROZEN_PRICE,
+          price: muleStockPrice,
+          qty: MULE_STOCK_COUNT
+        },
+        salesForce: {
+          price: salesForceStockPrice,
+          qty: SALESFORCE_STOCK_COUNT,
+        }
+      };
 
-      })
-    }).catch(err => { console.log("there has been some error: " + err) });
+      res.send(response);
 
+    })
+    .catch(err => { console.log("there has been some error: " + err) });
   });
-
 }
 
 function getPrice(stock) {
   return new Promise((resolve, reject) => {
-
     let path = url + stock;
-
     request.get(path, (error, response, body) => {
       if(error) {
         reject(error);
@@ -51,8 +51,6 @@ function getPrice(stock) {
             let price = result.StockQuote.LastPrice[0];
             resolve(price);
         });
-
-
       }
     });
 
