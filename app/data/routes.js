@@ -14,7 +14,7 @@ module.exports = function(app, db) {
     if(!process.env.TOKEN) res.status('503').send("The security has not been configured yet");
     if(req.headers.authorization !== process.env.TOKEN) res.status('401').send();
 
-    let mulePricePromise = getPrice(MULE_SYMBOL);
+    let mulePricePromise = 0;
     let salesforcePricePromise = getPrice(SALESFORCE_SYMBOL);
 
     Promise.all([mulePricePromise, salesforcePricePromise]).then(values => {
